@@ -1,0 +1,36 @@
+ID: MTAApp2
+_schema-version: '2.1'
+parameters:
+   deploy_mode: html5-repo
+version: 0.0.1
+
+modules:
+ - name: mtaapp2-approuter
+   type: approuter.nodejs
+   path: mtaapp2-approuter
+   parameters:
+      disk-quota: 256M
+      memory: 256M
+   requires:
+    - name: MTAApp2_html5_repo_runtime
+
+
+ - name: MTAApp2_ui_deployer
+   type: com.sap.html5.application-content
+   path: MTAApp2_ui_deployer
+   requires:
+    - name: MTAApp2_html5_repo_host
+
+resources:
+ - name: MTAApp2_html5_repo_runtime
+   parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+
+ - name: MTAApp2_html5_repo_host
+   parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+
