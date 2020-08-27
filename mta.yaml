@@ -36,6 +36,28 @@ modules:
       build-result: dist
     requires:
       - name: UAA-service
+      - name: core_xsjs_api
+        group: 'destinations '
+        properties:
+          name: core-xsjs-backend
+          url: ' ~{url}'
+          forwardAuthToken: true
+  - name: db
+    type: hdb
+    path: db
+    requires:
+      - name: hdi_db
+  - name: core_xsjs
+    type: nodejs
+    path: core_xsjs
+    provides:
+      - name: core_xsjs_api
+        properties:
+          url: '${default-url}'
+    requires:
+      - name: UAA-service
+      - name: hdi_db
+      - name: db
 resources:
   - name: MTAApp2_html5_repo_runtime
     parameters:
@@ -60,3 +82,10 @@ resources:
     type: org.cloudfoundry.managed-service
   - name: UAA-service
     type: com.sap.xs.uaa-space
+  - name: hdi_db
+    parameters:
+      config:
+        schema: DB
+    properties:
+      hdi-container-name: '${service-name}'
+    type: com.sap.xs.hdi-container
